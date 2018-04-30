@@ -1,0 +1,16 @@
+.jumbotron {
+    text-align: center;
+    background-image: url(../images/jumbo_bg.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+h1, p {
+    font-family: 'Inconsolata', monospace;
+}
+ 
+h1 {
+    font-weight: bold;
+    font-size: 100px;
+    color: white;
+}
