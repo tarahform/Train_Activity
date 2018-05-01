@@ -47,6 +47,17 @@ $("#add-train-btn").click(function (e) {
 push userinput to table
 ------------------*/
 
+
+
+// look this up!
+// ref.addChildEventListener(new ChildEventListener() {
+//     onChildAdded(DataSnapshot, dataSnapshot, String prevChildKey) {
+//         Post newPost = dataSnapshot.getValue(Post.class);
+//         System.out.println("Author: " + newPost.author);
+//         System.out.println("Title: " + newPost.title);
+//         System.out.println("Previous Post ID: " + prevChildKey);
+//     }
+
 // database.ref().on("value", function (snapshot) {
 //     console.log(snapshot.val());
 //     $("#newTrainRow").text(snapshot.val().newTrain);
