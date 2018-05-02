@@ -1,10 +1,4 @@
 /*--------------------
-  Global Variables
-  ------------------*/
-
-
-
-/*--------------------
 connect to firebase
 ------------------*/
 var config = {
@@ -18,20 +12,21 @@ var config = {
 firebase.initializeApp(config);
 
 var database = firebase.database();
+// end of firbase //
 
-/*--------------------
-   Functions
-------------------*/
+// create on click for add-train-btn
 $("#add-train-btn").click(function (e) {
     e.preventDefault();
-    console.log("clicked");
+    // console.log("clicked");
 
+    // create variables for userinput
     var trainName = $('#train-name-input').val().trim();
     var trainDestination = $('#destination-input').val().trim();
     var trainFirst = $('#first-train-input').val().trim();
     var trainFrequency = $('#frequency-input').val().trim();
-    console.log('TRAINNAME: ' + trainName);
 
+
+    // turn user input to an object
     var newTrain = {
         trainName: trainName,
         trainDestination: trainDestination,
@@ -39,17 +34,80 @@ $("#add-train-btn").click(function (e) {
         trainFrequency: trainFrequency
     }
 
+
+    var trainAdded = $("#newTrainRow").val().trim();
+
     database.ref().push(newTrain);
 
 });
 
-/*--------------------
-push userinput to table
-------------------*/
+// get keys and values from firebase and push to document
+database.ref().on("child_added", function (snapshot) {
+    console.log(snapshot.val());
+    var train = snapshot.val();
+    var stupidTrainMath = stupidTrain(train.trainFrequency, train.trainFirst);
+    var tr = $("<tr>")
+    var tdName = $("<td>").text(train.trainName);
+    var tdDest = $("<td>").text(train.trainDestination);
+    var tdFreq = $("<td>").text(train.trainFrequency);
+    var tdArr = $("<td>").text(stupidTrainMath.trainMathFormatted);
+    var tdAway = $("<td>").text(stupidTrainMath.trainAway);
+    tr.append(tdName);
+    tr.append(tdDest);
+    tr.append(tdFreq);
+    tr.append(tdArr);
+    tr.append(tdAway);
+    $("#newTrainRow").append(tr);
+});
 
+function stupidTrain(trainFrequency, trainFirst) {
 
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var trainFirstConverted = moment(trainFirst, "HH:mm A").subtract(1, "years");
+    console.log(trainFirstConverted);
 
-// look this up!
+    // current time
+    var currenttime = moment();
+    console.log("Ticking " + moment(currenttime).format("hh:mm A"));
+
+    // Difference between the times
+    var diffTime = currenttime.diff(moment(trainFirstConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % trainFrequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var trainAway = trainFrequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + trainAway);
+
+    // Next Train
+    var trainArrival = currenttime.add(trainAway, "minutes");
+    console.log("ARRIVAL TIME: " + moment(trainArrival).format("hh:mm"));
+
+    var trainMathFormatted = moment(trainArrival).format("LLL");
+
+    return {trainMathFormatted, trainAway};
+}
+
+// ----- look this up!!!
+// var userDataRef = firebase.database().ref("UserData").orderByKey();
+// userDataRef.once("value").then(function(snapshot) {
+// snapshot.forEach(function(childSnapshot) {
+//   var key = childSnapshot.key;
+//   var childData = childSnapshot.val();              
+
+//   var name_val = childSnapshot.val().Name;
+//   var id_val = childSnapshot.val().AssignedID;
+
+//   $("#name").append(name_val);
+//   $("#id").append(id_val);
+
+//   });
+// });
+
+// ----- look this up!
 // ref.addChildEventListener(new ChildEventListener() {
 //     onChildAdded(DataSnapshot, dataSnapshot, String prevChildKey) {
 //         Post newPost = dataSnapshot.getValue(Post.class);
@@ -57,15 +115,5 @@ push userinput to table
 //         System.out.println("Title: " + newPost.title);
 //         System.out.println("Previous Post ID: " + prevChildKey);
 //     }
-
-// database.ref().on("value", function (snapshot) {
-//     console.log(snapshot.val());
-//     $("#newTrainRow").text(snapshot.val().newTrain);
-//     trainAdded = snapshot.val().newTrain;
-// });
-
-// $("#add-train-btn").on("click", function() {
-// database.ref().set({
-//     newTrain: trainAdded
-// });
-// });
+// $("#newTrainRow").text(snapshot.val().newTrain);
+// trainAdded = snapshot.val().newTrain;
