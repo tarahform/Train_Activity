@@ -89,31 +89,5 @@ function stupidTrain(trainFrequency, trainFirst) {
     var trainMathFormatted = moment(trainArrival).format("LLL");
 
     return {trainMathFormatted, trainAway};
-}
+};
 
-// ----- look this up!!!
-// var userDataRef = firebase.database().ref("UserData").orderByKey();
-// userDataRef.once("value").then(function(snapshot) {
-// snapshot.forEach(function(childSnapshot) {
-//   var key = childSnapshot.key;
-//   var childData = childSnapshot.val();              
-
-//   var name_val = childSnapshot.val().Name;
-//   var id_val = childSnapshot.val().AssignedID;
-
-//   $("#name").append(name_val);
-//   $("#id").append(id_val);
-
-//   });
-// });
-
-// ----- look this up!
-// ref.addChildEventListener(new ChildEventListener() {
-//     onChildAdded(DataSnapshot, dataSnapshot, String prevChildKey) {
-//         Post newPost = dataSnapshot.getValue(Post.class);
-//         System.out.println("Author: " + newPost.author);
-//         System.out.println("Title: " + newPost.title);
-//         System.out.println("Previous Post ID: " + prevChildKey);
-//     }
-// $("#newTrainRow").text(snapshot.val().newTrain);
-// trainAdded = snapshot.val().newTrain;
